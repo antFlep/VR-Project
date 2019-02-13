@@ -7,7 +7,7 @@ public class ObjectManipulator : MonoBehaviour
     Camera mainCamera;
     int range = 100;
     string mode = "none";
-    BaseObject selectedObject = null;
+    BaseObject selectedObject;
 
     // Start is called before the first frame update
     void Start()
@@ -31,8 +31,9 @@ public class ObjectManipulator : MonoBehaviour
             mode = "compress";
         if (Input.GetKeyDown(KeyCode.Alpha5))
             mode = "move";
-
-
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+            mode = "none";
+        
         // Select something
         if (Input.GetMouseButtonDown(0))
         {
@@ -51,7 +52,7 @@ public class ObjectManipulator : MonoBehaviour
             {
                 Vector3 laserEnd = hit.point;
                 //Debug.Log(hit.transform.name);
-                BaseObject selectedObject= hit.transform.GetComponent<BaseObject>();
+                selectedObject = hit.transform.GetComponent<BaseObject>();
                 if (selectedObject)
                 {
                     selectedObject.face = selectedObject.GetHitFace(hit);
@@ -63,9 +64,12 @@ public class ObjectManipulator : MonoBehaviour
         }
 
         // Disable object and selection mode
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && selectedObject)
         {
             Debug.Log("Disable object selection");
+            selectedObject.isActive = false;
+            selectedObject.mode = "none";
+            selectedObject = null;
         }
 
     }

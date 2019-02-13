@@ -107,59 +107,69 @@ public class BaseObject : MonoBehaviour
         North,
         South
     }
+    
 
     public MCFace GetHitFace(RaycastHit hit)
     {
 
-        Vector3 incomingVec = hit.normal - transform.TransformVector(Vector3.up);
+        Vector3 incomingVec = hit.normal - transform.TransformVector(new Vector3(0, 1 / transform.localScale.y, 0));
 
         //float x = incomingVec.x;
         //float y = incomingVec.y;
         //float z = incomingVec.z;
 
-        //float xScale = transform.localScale.x;
-        //float yScale = transform.localScale.y;
-        //float zScale = transform.localScale.z;
+        float xScale = transform.localScale.x;
+        float yScale = transform.localScale.y;
+        float zScale = transform.localScale.z;
 
-        //incomingVec = new Vector3(x*xScale, y*yScale, z*zScale);
+        //incomingVec = new Vector3(x / xScale, y / yScale, z * zScale);
+
+
+        Vector3 SOUTH = transform.TransformVector(new Vector3(0, -1/yScale, -1/zScale));
+        Vector3 NORTH = transform.TransformVector(new Vector3(0, -1/yScale, 1/zScale));
+        Vector3 UP = transform.TransformVector(new Vector3(0, 0, 0));
+        Vector3 DOWN = transform.TransformVector(new Vector3(0, -2/yScale, 0));
+        Vector3 WEST = transform.TransformVector(new Vector3(-1/xScale, -1/yScale, 0));
+        Vector3 EAST = transform.TransformVector(new Vector3(1/xScale, -1/yScale, 0));
+
 
         Debug.Log("Incoming Vec: " + incomingVec + 
-            "\nS: " + transform.TransformVector(new Vector3( 0, -1, -1)) + " N: " + transform.TransformVector(new Vector3(0, -1, 1)) +
-            "\nW: " + transform.TransformVector(new Vector3(-1, -1,  0)) + " E: " + transform.TransformVector(new Vector3(1, -1, 0)) +
-            "\nU: " + transform.TransformVector(new Vector3( 0,  0,  0)) + " D: " + transform.TransformVector(new Vector3(0, -2, 0))); 
+            "\nS: " + SOUTH + " N: " + NORTH +
+            "\nW: " + WEST + " E: " + EAST +
+            "\nU: " + UP + " D: " + DOWN); 
             
 
-        if (incomingVec == transform.TransformVector(new Vector3(0, -1, -1)))
+        if (incomingVec == SOUTH)
         {
             Debug.Log("Hit South");
             return MCFace.South;
         }
 
-        if (incomingVec == transform.TransformVector(new Vector3(0, -1, 1)))
+        if (incomingVec == NORTH)
         {
             Debug.Log("Hit North");
             return MCFace.North;
         }
 
-        if (incomingVec == transform.TransformVector(new Vector3(0, 0, 0)))
+        if (incomingVec == UP)
         {
             Debug.Log("Hit Up");
             return MCFace.Up;
         }
 
-        if (incomingVec == transform.TransformVector(new Vector3(0, -2, 0)))
+        if (incomingVec == DOWN)
         {
             Debug.Log("Hit Down");
             return MCFace.Down;
         }
 
-        if (incomingVec == transform.TransformVector(new Vector3(-1, -1, 0)))
+        if (incomingVec == WEST)
         {
             Debug.Log("Hit West");
             return MCFace.West;
         }
 
-        if (incomingVec == transform.TransformVector(new Vector3(1, -1, 0)))
+        if (incomingVec == EAST)
         {
             Debug.Log("Hit East");
             return MCFace.East;
