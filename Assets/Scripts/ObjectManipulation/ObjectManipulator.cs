@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class ObjectManipulator : MonoBehaviour
 {
+    public GameObject menu;
+    public FirstPersonController fpsController;
+
     Camera mainCamera;
     int range = 100;
     string mode = "none";
@@ -13,6 +17,8 @@ public class ObjectManipulator : MonoBehaviour
     void Start()
     {
         mainCamera = GetComponent<Camera>();
+        menu = GameObject.Find("Menu");
+        fpsController = GameObject.Find("FPSController").GetComponent<FirstPersonController>();
     }
 
     // Update is called once per frame
@@ -33,6 +39,22 @@ public class ObjectManipulator : MonoBehaviour
             mode = "move";
         if (Input.GetKeyDown(KeyCode.Alpha0))
             mode = "none";
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            if (fpsController.isActiveAndEnabled)
+            {
+                fpsController.enabled = false;
+                menu.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                fpsController.enabled = true;
+                menu.SetActive(false);
+            }
+        }
         
         // Select something
         if (Input.GetMouseButtonDown(0))
@@ -53,6 +75,13 @@ public class ObjectManipulator : MonoBehaviour
                 Vector3 laserEnd = hit.point;
                 //Debug.Log(hit.transform.name);
                 selectedObject = hit.transform.GetComponent<BaseObject>();
+                if (!selectedObject)
+                {
+                    // get invisible cube from sphere
+                    selectedObject = hit.transform.childCount > 0 ? hit.transform.GetChild(0).GetComponent<BaseObject>() : null; 
+                    //selectedObject = hit.transform.GetChild(0).GetComponent<BaseObject>();
+                }
+
                 if (selectedObject)
                 {
                     selectedObject.face = selectedObject.GetHitFace(hit);
