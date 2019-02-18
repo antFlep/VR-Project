@@ -18,6 +18,7 @@ public class ObjectManipulator : MonoBehaviour
     {
         mainCamera = GetComponent<Camera>();
         menu = GameObject.Find("Menu");
+        menu.SetActive(false);
         fpsController = GameObject.Find("FPSController").GetComponent<FirstPersonController>();
     }
 
@@ -61,17 +62,20 @@ public class ObjectManipulator : MonoBehaviour
         {
             Debug.Log("Current mode: " + mode);
             // Raycast Direction
-            Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
+            Vector3 forward = transform.TransformDirection(Vector3.forward);
 
             // Raycast for hitdetection
             RaycastHit hit;
             Ray ray = new Ray(transform.position, forward);
             Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 1f);
-            bool result = Physics.Raycast(ray, out hit, range);
+
+            LayerMask layer = LayerMask.GetMask("BasicObject");
+            bool result = Physics.Raycast(ray, out hit, range, layer);
 
             // If something was hit
             if (result)
             {
+                Debug.Log("Hit something");
                 Vector3 laserEnd = hit.point;
                 //Debug.Log(hit.transform.name);
                 selectedObject = hit.transform.GetComponent<BaseObject>();
