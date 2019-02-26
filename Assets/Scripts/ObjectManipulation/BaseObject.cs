@@ -43,23 +43,14 @@ public class BaseObject : MonoBehaviour
     void Shrink()
     {
         Debug.Log("Shrinking");
-        scale -= scaleFactor;
-
-        if (scale < 0)
-        {
-            scale += scaleFactor;
-            mode = "none";
-            isActive = false;
-        }
-
-        parent.transform.localScale = new Vector3(scale, scale, scale);
+        // check if too small toDo.
+        parent.transform.localScale = new Vector3(parent.transform.localScale.x - scaleFactor, parent.transform.localScale.y - scaleFactor, parent.transform.localScale.z - scaleFactor);
     }
 
     void Expand()
     {
-        scale += scaleFactor;
-        Debug.Log("Cannot be Shrunk further");
-        parent.transform.localScale = new Vector3(scale, scale, scale);
+        Debug.Log("Expanding");
+        parent.transform.localScale = new Vector3(parent.transform.localScale.x + scaleFactor, parent.transform.localScale.y + scaleFactor, parent.transform.localScale.z + scaleFactor);
     }
 
     void Rotate()
@@ -113,25 +104,25 @@ public class BaseObject : MonoBehaviour
 
     public MCFace GetHitFace(RaycastHit hit)
     {
-        Vector3 incomingVec = hit.normal - transform.TransformVector(new Vector3(0, 1, 0));
-        Debug.Log("hit.normal before:" + hit.normal + " after: " + transform.TransformVector(hit.normal ));
+        Vector3 incomingVec = transform.InverseTransformVector(hit.normal).normalized - (new Vector3(0, 1, 0));
+        //Debug.Log("hit.normal before:" + hit.normal + " after: " + transform.TransformVector(hit.normal ));
 
-        //float x = incomingVec.x;
-        //float y = incomingVec.y;
-        //float z = incomingVec.z;
+        float x = incomingVec.x;
+        float y = incomingVec.y;
+        float z = incomingVec.z;
 
         float xScale = parent.transform.localScale.x;
         float yScale = parent.transform.localScale.y;
         float zScale = parent.transform.localScale.z;
 
-        //incomingVec = new Vector3(x / xScale, y / yScale, z * zScale);
+        //incomingVec = new Vector3(x / xScale, y / yScale, z / zScale);
 
-        Vector3 SOUTH = transform.TransformVector(new Vector3(          0, -1 / yScale, -1 / zScale));
-        Vector3 NORTH = transform.TransformVector(new Vector3(          0, -1 / yScale,  1 / zScale));
-        Vector3 UP    = transform.TransformVector(new Vector3(          0,           0,           0));
-        Vector3 DOWN  = transform.TransformVector(new Vector3(          0, -2 / yScale,           0));
-        Vector3 WEST  = transform.TransformVector(new Vector3(-1 / xScale, -1 / yScale,           0));
-        Vector3 EAST  = transform.TransformVector(new Vector3( 1 / xScale, -1 / yScale,           0));
+        Vector3 SOUTH = (new Vector3(0, -1 , -1));
+        Vector3 NORTH = (new Vector3(0, -1 ,  1));
+        Vector3 UP    = (new Vector3(0, 0, 0));
+        Vector3 DOWN  = (new Vector3(0, -2 , 0));
+        Vector3 WEST  = (new Vector3(-1, -1 , 0));
+        Vector3 EAST  = (new Vector3( 1, -1 , 0));
 
         //SOUTH.y *= yScale;
         //NORTH.y *= yScale;
@@ -208,8 +199,8 @@ public class BaseObject : MonoBehaviour
             if (face == MCFace.South || face == MCFace.North)
                 z += Time.deltaTime * 10;
 
-            //if (face == MCFace.Up || face == MCFace.Down)
-            //    y += Time.deltaTime * 10;
+            if (face == MCFace.Up || face == MCFace.Down)
+                y += Time.deltaTime * 10;
 
             parent.transform.localScale = new Vector3(x, y, z);
         }
