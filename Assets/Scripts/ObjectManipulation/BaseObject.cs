@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BaseObject : MonoBehaviour
 {
-    float scale = 1;
     float scaleFactor = 0.01f;
     float x;
 
