@@ -209,4 +209,37 @@ public class BaseObject : MonoBehaviour
     {
 
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Collider Enter");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Trigger Enter");
+        Vector3 origin = other.gameObject.transform.position;
+        // Raycast Direction
+        Vector3 shot = new Vector3(-origin.x, -origin.y, -origin.z);
+            
+
+        // Raycast for hitdetection
+        RaycastHit hit;
+        Ray ray = new Ray(origin, shot);
+        Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 1f);
+
+        LayerMask layer = LayerMask.GetMask("BasicObject");
+        bool result = Physics.Raycast(ray, out hit, 100, layer);
+
+        // If something was hit
+        if (result)
+        {
+            Debug.Log("Hit something");
+            Vector3 laserEnd = hit.point;
+            //Debug.Log(hit.transform.name);
+            Debug.Log("Face hit: " +GetHitFace(hit));
+        }
+    }
+
+
 }
