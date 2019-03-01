@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Valve.VR;
 
 public class BaseObject : MonoBehaviour
 {
@@ -10,8 +11,10 @@ public class BaseObject : MonoBehaviour
     public string mode = "none";
     public MCFace face;
     public bool isActive = false;
+    bool stretchMode = false;
 
     GameObject parent;
+    GameObject hand = null;
 
 
     // Start is called before the first frame update
@@ -33,9 +36,17 @@ public class BaseObject : MonoBehaviour
                 Expand();
             if (mode.Equals("rotate"))
                 Rotate();
-            if (mode.Equals("stretch"))
+            if (stretchMode)
                 Stretch();
+        }
 
+        if (stretchMode)
+               Stretch();
+
+        if (hand)
+        {
+            if (hand.GetComponent<ModeSwitcher>().stretchMode)
+                Stretch();
         }
     }
 
@@ -184,25 +195,22 @@ public class BaseObject : MonoBehaviour
 
     void Stretch()
     {
-        if (Input.GetAxis("Mouse X") > 0)
-        {
-            Debug.Log("Stretching");
+        Debug.Log("Stretching");
 
-            float x = parent.transform.localScale.x;
-            float y = parent.transform.localScale.y;
-            float z = parent.transform.localScale.z;
+        float x = parent.transform.localScale.x;
+        float y = parent.transform.localScale.y;
+        float z = parent.transform.localScale.z;
 
-            if (face == MCFace.East || face == MCFace.West)
-                x += Time.deltaTime * 10;
+        if (face == MCFace.East || face == MCFace.West)
+            x += Time.deltaTime * 2;
 
-            if (face == MCFace.South || face == MCFace.North)
-                z += Time.deltaTime * 10;
+        if (face == MCFace.South || face == MCFace.North)
+            z += Time.deltaTime * 2;
 
-            if (face == MCFace.Up || face == MCFace.Down)
-                y += Time.deltaTime * 10;
+        if (face == MCFace.Up || face == MCFace.Down)
+            y += Time.deltaTime * 2;
 
-            parent.transform.localScale = new Vector3(x, y, z);
-        }
+        parent.transform.localScale = new Vector3(x, y, z);
     }
 
     void Compress()
@@ -217,29 +225,36 @@ public class BaseObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger Enter");
-        Vector3 origin = other.gameObject.transform.position;
-        // Raycast Direction
-        Vector3 shot = new Vector3(-origin.x, -origin.y, -origin.z);
-            
+        if (other.gameObject.name == "handCollider") { 
 
-        // Raycast for hitdetection
-        RaycastHit hit;
-        Ray ray = new Ray(origin, shot);
-        Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 1f);
+            Debug.Log("Trigger Enter");
+            Vector3 origin = other.gameObject.transform.position;
+            // Raycast Direction
+            Vector3 shot = new Vector3(-origin.x, -origin.y, -origin.z);
 
-        LayerMask layer = LayerMask.GetMask("BasicObject");
-        bool result = Physics.Raycast(ray, out hit, 100, layer);
+            // Raycast for hitdetection
+            RaycastHit hit;
+            Ray ray = new Ray(origin, shot);
+            Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 1f);
 
-        // If something was hit
-        if (result)
-        {
-            Debug.Log("Hit something");
-            Vector3 laserEnd = hit.point;
-            //Debug.Log(hit.transform.name);
-            Debug.Log("Face hit: " +GetHitFace(hit));
+            LayerMask layer = LayerMask.GetMask("BasicObject");
+            bool result = Physics.Raycast(ray, out hit, 100, layer);
+
+            // If something was hit
+            if (result)
+            {
+                Debug.Log("Hit something");
+                Vector3 laserEnd = hit.point;
+                //Debug.Log(hit.transform.name);
+                
+                face = GetHitFace(hit);
+                Debug.Log("Face hit: " + face);
+            }
+
+            stretchMode = other.GetComponentInParent<ModeSwitcher>().stretchMode;
+            Debug.Log("Trigger Enterd, strech mode on?" + stretchMode);
+            hand = other.gameObject;
         }
     }
-
 
 }
