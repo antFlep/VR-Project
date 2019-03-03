@@ -5,16 +5,18 @@ using Valve.VR;
 
 public class BaseObject : MonoBehaviour
 {
-    float scaleFactor = 0.01f;
-    float x;
-
-    public string mode = "none";
+    
+    public ModeSwitcher.Mode mode = ModeSwitcher.Mode.None;
+    public ModeSwitcher modeSwitcher;
     public MCFace face;
     public bool isActive = false;
-    bool stretchMode = false;
+    //bool stretchMode = false;
 
     GameObject parent;
     GameObject hand = null;
+
+    float scaleFactor = 0.01f;
+    
 
 
     // Start is called before the first frame update
@@ -26,28 +28,38 @@ public class BaseObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isActive)
+        //if (isActive)
+        //{
+        //    //if (mode.Equals("none"))
+        //    //    Debug.Log("noting to Do");
+        //    if (mode.Equals("shrink"))
+        //        Shrink();
+        //    if (mode.Equals("expand"))
+        //        Expand();
+        //    if (mode.Equals("rotate"))
+        //        Rotate();
+        //    if (stretchMode)
+        //        Stretch();
+        //}
+
+        switch(mode)
         {
-            //if (mode.Equals("none"))
-            //    Debug.Log("noting to Do");
-            if (mode.Equals("shrink"))
-                Shrink();
-            if (mode.Equals("expand"))
+            case ModeSwitcher.Mode.Scale:
                 Expand();
-            if (mode.Equals("rotate"))
-                Rotate();
-            if (stretchMode)
+                break;
+            case ModeSwitcher.Mode.Stretch:
                 Stretch();
+                break;
+            default:
+                //Debug.Log("No Mode enabled");
+                break;
         }
 
-        if (stretchMode)
-               Stretch();
-
-        if (hand)
-        {
-            if (hand.GetComponent<ModeSwitcher>().stretchMode)
-                Stretch();
-        }
+        //if (hand)
+        //{
+        //    if (hand.GetComponent<ModeSwitcher>().stretchMode)
+        //        Stretch();
+        //}
     }
 
     void Shrink()
@@ -115,7 +127,6 @@ public class BaseObject : MonoBehaviour
     public MCFace GetHitFace(RaycastHit hit)
     {
         Vector3 incomingVec = transform.InverseTransformVector(hit.normal).normalized - (new Vector3(0, 1, 0));
-        //Debug.Log("hit.normal before:" + hit.normal + " after: " + transform.TransformVector(hit.normal ));
 
         float x = incomingVec.x;
         float y = incomingVec.y;
@@ -125,27 +136,17 @@ public class BaseObject : MonoBehaviour
         float yScale = parent.transform.localScale.y;
         float zScale = parent.transform.localScale.z;
 
-        //incomingVec = new Vector3(x / xScale, y / yScale, z / zScale);
+        Vector3 SOUTH = (new Vector3(0, -1, -1));
+        Vector3 NORTH = (new Vector3(0, -1,  1));
+        Vector3 UP    = (new Vector3(0,  0,  0));
+        Vector3 DOWN  = (new Vector3(0, -2,  0));
+        Vector3 WEST  = (new Vector3(-1,-1,  0));
+        Vector3 EAST  = (new Vector3( 1,-1,  0));
 
-        Vector3 SOUTH = (new Vector3(0, -1 , -1));
-        Vector3 NORTH = (new Vector3(0, -1 ,  1));
-        Vector3 UP    = (new Vector3(0, 0, 0));
-        Vector3 DOWN  = (new Vector3(0, -2 , 0));
-        Vector3 WEST  = (new Vector3(-1, -1 , 0));
-        Vector3 EAST  = (new Vector3( 1, -1 , 0));
-
-        //SOUTH.y *= yScale;
-        //NORTH.y *= yScale;
-        //WEST.y *= yScale;
-        //EAST.y *= yScale;
-        //UP.y *= yScale;
-        //DOWN.y *= yScale;
-
-
-        Debug.Log("Incoming Vec: " + incomingVec +
+        Debug.Log("Incoming Vec: "   + incomingVec +
             "\nS: " + SOUTH + " N: " + NORTH +
-            "\nW: " + WEST + " E: " + EAST +
-            "\nU: " + UP + " D: " + DOWN);
+            "\nW: " + WEST  + " E: " + EAST +
+            "\nU: " + UP    + " D: " + DOWN);
 
         if (incomingVec == SOUTH)
             return MCFace.South;
@@ -218,41 +219,28 @@ public class BaseObject : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("Collider Enter");
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == "handCollider") { 
+            Vector3 rayOrigin = other.gameObject.transform.position;
+            Vector3 rayDirection = new Vector3(-rayOrigin.x, -rayOrigin.y, -rayOrigin.z);
 
-            Debug.Log("Trigger Enter");
-            Vector3 origin = other.gameObject.transform.position;
-            // Raycast Direction
-            Vector3 shot = new Vector3(-origin.x, -origin.y, -origin.z);
-
-            // Raycast for hitdetection
-            RaycastHit hit;
-            Ray ray = new Ray(origin, shot);
-            Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 1f);
-
+            RaycastHit rayHitPoint;
+            Ray ray = new Ray(rayOrigin, rayDirection);
             LayerMask layer = LayerMask.GetMask("BasicObject");
-            bool result = Physics.Raycast(ray, out hit, 100, layer);
+
+            bool result = Physics.Raycast(ray, out rayHitPoint, 100, layer);
+            Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 1f);
 
             // If something was hit
             if (result)
             {
-                Debug.Log("Hit something");
-                Vector3 laserEnd = hit.point;
-                //Debug.Log(hit.transform.name);
-                
-                face = GetHitFace(hit);
-                Debug.Log("Face hit: " + face);
+                Vector3 laserEnd = rayHitPoint.point;
+                face = GetHitFace(rayHitPoint);
+                Debug.Log("Hit " + face + " face");
             }
 
-            stretchMode = other.GetComponentInParent<ModeSwitcher>().stretchMode;
-            Debug.Log("Trigger Enterd, strech mode on?" + stretchMode);
+            Debug.Log("Trigger Enterd, strech mode on?" + modeSwitcher.mode);
             hand = other.gameObject;
         }
     }

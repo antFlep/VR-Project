@@ -5,21 +5,16 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 public class ObjectManipulator : MonoBehaviour
 {
-    public GameObject menu;
-    public FirstPersonController fpsController;
-
     Camera mainCamera;
     int range = 100;
-    string mode = "none";
+    ModeSwitcher.Mode mode = ModeSwitcher.Mode.None;
     BaseObject selectedObject;
+    public ModeSwitcher modeSwitcher;
 
     // Start is called before the first frame update
     void Start()
     {
         mainCamera = GetComponent<Camera>();
-        menu = GameObject.Find("Menu");
-        menu.SetActive(false);
-        fpsController = GameObject.Find("FPSController").GetComponent<FirstPersonController>();
     }
 
     // Update is called once per frame
@@ -27,36 +22,22 @@ public class ObjectManipulator : MonoBehaviour
     {
         // Set Selection Mode
         if (Input.GetKeyDown(KeyCode.Alpha1))
-            mode = "expand";
+            modeSwitcher.mode = ModeSwitcher.Mode.Scale;
         if (Input.GetKeyDown(KeyCode.Alpha2))
-            mode = "shrink";
+            modeSwitcher.mode = ModeSwitcher.Mode.Stretch;
         if (Input.GetKeyDown(KeyCode.Alpha3))
-            mode = "rotate";
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-            mode = "stretch";
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-            mode = "compress";
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-            mode = "move";
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-            mode = "none";
+            modeSwitcher.mode = ModeSwitcher.Mode.Rotate;
 
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            if (fpsController.isActiveAndEnabled)
-            {
-                fpsController.enabled = false;
-                menu.SetActive(true);
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else
-            {
-                fpsController.enabled = true;
-                menu.SetActive(false);
-            }
-        }
-        
+        //TODO: Most likely delete keyinputs below
+        //if (Input.GetKeyDown(KeyCode.Alpha4))
+        //    mode = "stretch";
+        //if (Input.GetKeyDown(KeyCode.Alpha5))
+        //    mode = "compress";
+        //if (Input.GetKeyDown(KeyCode.Alpha5))
+        //    mode = "move";
+        //if (Input.GetKeyDown(KeyCode.Alpha0))
+        //    mode = "none";
+
         // Select something
         if (Input.GetMouseButtonDown(0))
         {
@@ -101,7 +82,7 @@ public class ObjectManipulator : MonoBehaviour
         {
             Debug.Log("Disable object selection");
             selectedObject.isActive = false;
-            selectedObject.mode = "none";
+            selectedObject.mode = ModeSwitcher.Mode.None;
             selectedObject = null;
         }
 

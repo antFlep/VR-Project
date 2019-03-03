@@ -5,27 +5,51 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 public class MenuController : MonoBehaviour
 {
+    public GameObject menuCanvas;
+    public GameObject fps;
+    public FirstPersonController fpsController;
+    public bool vrEnabled = false;
+
+    GameObject menu;
     GameObject pnlMain;
     GameObject pnlObjects;
     GameObject pnlTextures;
-    GameObject fps;
-
-    public GameObject baseObject;
 
     // Start is called before the first frame update
     void Start()
     {
-        fps = GameObject.Find("FPSController");
-        pnlMain = GameObject.Find("pnlMain");
-        pnlObjects = GameObject.Find("pnlObjects");
-        pnlTextures = GameObject.Find("pnlTextures");
-        BackToMain();
+        if (vrEnabled)
+        {
+            Debug.Log("Vr is enabled");
+        }
+        else
+        {
+            menu        = menuCanvas.transform.Find("MainMenu").gameObject;
+            pnlMain     = menu.transform.Find("pnlMain").gameObject;
+            pnlObjects  = menu.transform.Find("pnlObjects").gameObject;
+            pnlTextures = menu.transform.Find("pnlTextures").gameObject;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.C) && !vrEnabled)
+        {
+            if (fpsController.isActiveAndEnabled)
+            {
+                fpsController.enabled = false;
+                menu.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                fpsController.enabled = true;
+                menu.SetActive(false);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Escape) && !vrEnabled)
             BackToMain();
     }
 
@@ -49,11 +73,5 @@ public class MenuController : MonoBehaviour
         pnlMain.SetActive(true);
         pnlObjects.SetActive(false);
         pnlTextures.SetActive(false);
-    }
-
-    // Creae Object
-    public void SpawnObject()
-    {
-        Instantiate(baseObject, fps.transform.position + new Vector3(2, 2, 2), new Quaternion(0, 0, 0, 0));
     }
 }
