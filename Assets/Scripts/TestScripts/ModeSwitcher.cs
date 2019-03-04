@@ -35,8 +35,7 @@ public class ModeSwitcher : MonoBehaviour
     {
         stretchMode = testAction.GetState(rightHand);
         if (testAction.GetState(rightHand)) mode = Mode.Stretch;
-        else 
-            mode = Mode.None;
+        else mode = Mode.None;
     }
 
     public bool GetTest()

@@ -231,7 +231,7 @@ public class BaseObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.name == "handCollider") { 
+        if (collider.gameObject.name == "RightHandCollider") { 
             Vector3 rayOrigin = collider.gameObject.transform.position;
             Vector3 rayDirection = new Vector3(-rayOrigin.x, -rayOrigin.y, -rayOrigin.z);
             rayDirection += transform.position;
@@ -258,6 +258,8 @@ public class BaseObject : MonoBehaviour
             if (modeSwitcher.mode == ModeSwitcher.Mode.Stretch) stretching = false;
             else stretching = true;
         }
+
+
     }
 
     private void OnTriggerStay(Collider other)
@@ -265,9 +267,11 @@ public class BaseObject : MonoBehaviour
 
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider collider)
     {
-        hand = null;
+        //Debug.Log("Exiting Collider");
+        //if (collider.gameObject.name == "RightExitCollider" || !stretching)
+            hand = null;
     }
 
 }
