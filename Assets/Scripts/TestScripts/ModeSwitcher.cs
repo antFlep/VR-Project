@@ -19,7 +19,8 @@ public class ModeSwitcher : MonoBehaviour
         Scale,
         Stretch,
         Compress,
-        Rotate
+        Rotate,
+        Weld,
     }
 
     
@@ -38,8 +39,15 @@ public class ModeSwitcher : MonoBehaviour
         else mode = Mode.None;
     }
 
-    public bool GetTest()
+    public bool GetStrech()
     {
+        // TODO: Rename Action (stretchAction)
+        return testAction.GetState(rightHand);
+    }
+
+    public  bool GetWeld()
+    {
+        // TODO: Create new Action (weldAction)
         return testAction.GetState(rightHand);
     }
 }
