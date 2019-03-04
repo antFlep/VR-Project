@@ -16,6 +16,9 @@ public class BaseObject : MonoBehaviour
     GameObject hand = null;
 
     float scaleFactor = 0.01f;
+
+    Collider handCollider = null;
+    bool stretching = false;
     
 
 
@@ -54,7 +57,7 @@ public class BaseObject : MonoBehaviour
                     Expand();
                     break;
                 case ModeSwitcher.Mode.Stretch:
-                    Stretch();
+                    Stretch(stretching ? 2 : -2);
                     break;
                 default:
                     //Debug.Log("Current Mode: " + mode);
@@ -200,8 +203,9 @@ public class BaseObject : MonoBehaviour
     //    return MCFace.None;
     //}
 
-    void Stretch()
+    void Stretch(int stretchValue)
     {
+
         Debug.Log("Stretching");
 
         float x = parent.transform.localScale.x;
@@ -209,13 +213,13 @@ public class BaseObject : MonoBehaviour
         float z = parent.transform.localScale.z;
 
         if (face == MCFace.East || face == MCFace.West)
-            x += Time.deltaTime * 2;
+            x += Time.deltaTime * stretchValue;
 
         if (face == MCFace.South || face == MCFace.North)
-            z += Time.deltaTime * 2;
+            z += Time.deltaTime * stretchValue;
 
         if (face == MCFace.Up || face == MCFace.Down)
-            y += Time.deltaTime * 2;
+            y += Time.deltaTime * stretchValue;
 
         parent.transform.localScale = new Vector3(x, y, z);
     }
@@ -225,10 +229,10 @@ public class BaseObject : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider collider)
     {
-        if (other.gameObject.name == "handCollider") { 
-            Vector3 rayOrigin = other.gameObject.transform.position;
+        if (collider.gameObject.name == "handCollider") { 
+            Vector3 rayOrigin = collider.gameObject.transform.position;
             Vector3 rayDirection = new Vector3(-rayOrigin.x, -rayOrigin.y, -rayOrigin.z);
             rayDirection += transform.position;
 
@@ -248,7 +252,11 @@ public class BaseObject : MonoBehaviour
             }
 
             Debug.Log("Trigger Enterd, strech mode on?" + modeSwitcher.mode);
-            hand = other.gameObject;
+            hand = collider.gameObject;
+            handCollider = collider;
+
+            if (modeSwitcher.mode == ModeSwitcher.Mode.Stretch) stretching = false;
+            else stretching = true;
         }
     }
 
