@@ -6,7 +6,7 @@ using Valve.VR;
 public class BaseObject : MonoBehaviour
 {
     
-    public ModeSwitcher.Mode mode = ModeSwitcher.Mode.None;
+    //public ModeSwitcher.Mode mode = ModeSwitcher.Mode.None;
     public ModeSwitcher modeSwitcher;
     public MCFace face;
     public bool isActive = false;
@@ -23,6 +23,7 @@ public class BaseObject : MonoBehaviour
     void Start()
     {
         parent = transform.parent.gameObject;
+        modeSwitcher = GameObject.Find("MasterObject").GetComponent<ModeSwitcher>();
     }
 
     // Update is called once per frame
@@ -42,19 +43,24 @@ public class BaseObject : MonoBehaviour
         //        Stretch();
         //}
 
-        switch(mode)
+        //Debug.Log("Position" + transform.InverseTransformVector(transform.position));
+        if (hand)
         {
-            case ModeSwitcher.Mode.Scale:
-                Expand();
-                break;
-            case ModeSwitcher.Mode.Stretch:
-                Stretch();
-                break;
-            default:
-                //Debug.Log("No Mode enabled");
-                break;
-        }
+            //Debug.Log("Current Mode: " + modeSwitcher.mode);
 
+            switch (modeSwitcher.mode)
+            {
+                case ModeSwitcher.Mode.Scale:
+                    Expand();
+                    break;
+                case ModeSwitcher.Mode.Stretch:
+                    Stretch();
+                    break;
+                default:
+                    //Debug.Log("Current Mode: " + mode);
+                    break;
+            }
+        }
         //if (hand)
         //{
         //    if (hand.GetComponent<ModeSwitcher>().stretchMode)
@@ -224,6 +230,7 @@ public class BaseObject : MonoBehaviour
         if (other.gameObject.name == "handCollider") { 
             Vector3 rayOrigin = other.gameObject.transform.position;
             Vector3 rayDirection = new Vector3(-rayOrigin.x, -rayOrigin.y, -rayOrigin.z);
+            rayDirection += transform.position;
 
             RaycastHit rayHitPoint;
             Ray ray = new Ray(rayOrigin, rayDirection);
@@ -243,6 +250,16 @@ public class BaseObject : MonoBehaviour
             Debug.Log("Trigger Enterd, strech mode on?" + modeSwitcher.mode);
             hand = other.gameObject;
         }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        hand = null;
     }
 
 }

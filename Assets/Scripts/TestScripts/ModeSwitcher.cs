@@ -9,6 +9,7 @@ public class ModeSwitcher : MonoBehaviour
     public SteamVR_Input_Sources rightHand;
     public SteamVR_Input_Sources leftHand;
     public SteamVR_Action_Boolean testAction; // 3
+    public Mode mode = Mode.None;
 
     public bool vrEnabled = false;
 
@@ -17,10 +18,11 @@ public class ModeSwitcher : MonoBehaviour
         None,
         Scale,
         Stretch,
+        Compress,
         Rotate
     }
 
-    public Mode mode = Mode.None;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +35,8 @@ public class ModeSwitcher : MonoBehaviour
     {
         stretchMode = testAction.GetState(rightHand);
         if (testAction.GetState(rightHand)) mode = Mode.Stretch;
-        if (stretchMode) Debug.Log("Stretch Mode On");
+        else 
+            mode = Mode.None;
     }
 
     public bool GetTest()

@@ -72,7 +72,7 @@ public class ObjectManipulator : MonoBehaviour
                     selectedObject.face = selectedObject.GetHitFace(hit);
                     Debug.Log(selectedObject.GetHitFace(hit));
                     selectedObject.isActive = true;
-                    selectedObject.mode = mode;
+                    //selectedObject.mode = mode;
                 }
             }
         }
@@ -82,7 +82,7 @@ public class ObjectManipulator : MonoBehaviour
         {
             Debug.Log("Disable object selection");
             selectedObject.isActive = false;
-            selectedObject.mode = ModeSwitcher.Mode.None;
+            //selectedObject.mode = ModeSwitcher.Mode.None;
             selectedObject = null;
         }
 
