@@ -45,6 +45,14 @@
       "type": "boolean"
     },
     {
+      "name": "/actions/default/in/WeldAction",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/MenuAction",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     },

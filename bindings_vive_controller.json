@@ -210,8 +210,14 @@
             },
             {
                "inputs" : {
+                  "east" : {
+                     "output" : "/actions/default/in/weldaction"
+                  },
                   "north" : {
                      "output" : "/actions/default/in/testaction"
+                  },
+                  "west" : {
+                     "output" : "/actions/default/in/menuaction"
                   }
                },
                "mode" : "dpad",
@@ -222,8 +228,14 @@
             },
             {
                "inputs" : {
+                  "east" : {
+                     "output" : "/actions/default/in/weldaction"
+                  },
                   "north" : {
                      "output" : "/actions/default/in/testaction"
+                  },
+                  "west" : {
+                     "output" : "/actions/default/in/menuaction"
                   }
                },
                "mode" : "dpad",
@@ -276,7 +288,7 @@
       }
    },
    "controller_type" : "vive_controller",
-   "description" : "Left Controller added Dpad North that triggers testaction",
+   "description" : "Added Dpad North that triggers testaction\n\nAdded Dpad East that triggers weldaction\n\n\nAdded Dpad West menuaction",
    "name" : "vive_controller_test",
    "options" : {},
    "simulated_actions" : []

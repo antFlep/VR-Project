@@ -49,7 +49,7 @@ public class BaseObject : MonoBehaviour
         //Debug.Log("Position" + transform.InverseTransformVector(transform.position));
         if (hand)
         {
-            //Debug.Log("Current Mode: " + modeSwitcher.mode);
+            Debug.Log("Current Mode: " + modeSwitcher.mode);
 
             switch (modeSwitcher.mode)
             {
@@ -60,7 +60,7 @@ public class BaseObject : MonoBehaviour
                     Stretch(stretching ? 2 : -2);
                     break;
                 default:
-                    //Debug.Log("Current Mode: " + mode);
+                    Debug.Log("Current Mode: " + modeSwitcher.mode);
                     break;
             }
         }
@@ -231,6 +231,10 @@ public class BaseObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
+        if (collider.gameObject.name == "RightHandCollider"
+            || collider.gameObject.name == "LeftHandCollider")
+            transform.GetComponent<MeshRenderer>().enabled = true;
+
         if (collider.gameObject.name == "RightHandCollider") { 
             Vector3 rayOrigin = collider.gameObject.transform.position;
             Vector3 rayDirection = new Vector3(-rayOrigin.x, -rayOrigin.y, -rayOrigin.z);
@@ -264,14 +268,19 @@ public class BaseObject : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        
 
+            
     }
 
     private void OnTriggerExit(Collider collider)
     {
+        if (collider.gameObject.name == "RightHandCollider" 
+            || collider.gameObject.name == "LeftHandCollider")
+            transform.GetComponent<MeshRenderer>().enabled = false;
         //Debug.Log("Exiting Collider");
         //if (collider.gameObject.name == "RightExitCollider" || !stretching)
-            hand = null;
+        hand = null;
     }
 
 }

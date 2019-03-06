@@ -16,7 +16,8 @@ GameObject:
   - component: {fileID: 7836873743340698498}
   - component: {fileID: 7836873743340698499}
   - component: {fileID: 7836873743340698496}
-  m_Layer: 0
+  - component: {fileID: 6135423773491620781}
+  m_Layer: 10
   m_Name: exactCubeUW
   m_TagString: weldable
   m_Icon: {fileID: 0}
@@ -30,7 +31,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7836873743340698497}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: -1.502}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -209,6 +210,19 @@ MonoBehaviour:
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   interactable: {fileID: 0}
+--- !u!114 &6135423773491620781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7836873743340698497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821030d9fc21c5e4884cd1a91f1c94c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modeSwitcher: {fileID: 0}
 --- !u!1001 &7836873742737505978
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -220,6 +234,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BaseCube
+      objectReference: {fileID: 0}
+    - target: {fileID: 4374675379035548953, guid: 59c49df5e38d5a34ba839e31b27bfda9,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5136964827237889409, guid: 59c49df5e38d5a34ba839e31b27bfda9,
         type: 3}
