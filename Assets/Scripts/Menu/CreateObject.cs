@@ -5,14 +5,7 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 public class CreateObject : MonoBehaviour
 {
-    public GameObject baseObject;
-    public GameObject fps;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        fps = GameObject.Find("FPSController");
-    }
+    public GameObject spawnObject;
 
     // Update is called once per frame
     void Update()
@@ -20,8 +13,9 @@ public class CreateObject : MonoBehaviour
 
     }
 
-    public void spawn()
+    private void OnTriggerEnter(Collider collider)
     {
-        Instantiate(baseObject, fps.transform.position + new Vector3(2, 2, 2), new Quaternion(0, 0, 0, 0));
+        if (collider.gameObject.transform.root.name == "Player")
+            Instantiate(spawnObject, transform.position, new Quaternion(0, 0, 0, 0));
     }
 }
