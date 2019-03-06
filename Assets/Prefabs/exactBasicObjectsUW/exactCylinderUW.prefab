@@ -223,6 +223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modeSwitcher: {fileID: 0}
+  weldMaterial: {fileID: 2100000, guid: b8d557773fd950946a6e5e44ed4f99ae, type: 2}
 --- !u!1001 &1400515011033274076
 PrefabInstance:
   m_ObjectHideFlags: 0
