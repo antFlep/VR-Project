@@ -16,11 +16,11 @@ public class ModeSwitcher : MonoBehaviour
     public GameObject objectToCreate;
     public GameObject objectToCreate2;
     public Mode mode = Mode.None;
-    public GameObject weldObject1;
-    public GameObject weldObject2;
+    public GameObject weldObject1 = null;
+    public GameObject weldObject2 = null;
 
-    public Hand rHand;
-    public Hand lHand;
+    public Hand rHand = null;
+    public Hand lHand = null;
 
     public bool vrEnabled = false;
 
@@ -60,15 +60,15 @@ public class ModeSwitcher : MonoBehaviour
             mode = Mode.Weld;
         }
 
-        if (menuAction.GetState(rightHand) && oneTime)
-        {
-            oneTime = false;
-            GameObject obj1 = Instantiate(objectToCreate, new Vector3(0, 0.5f, 0), new Quaternion(0, 0, 0, 0), null);
-            GameObject obj2 = Instantiate(objectToCreate2, new Vector3(1, 0.5f, 0), new Quaternion(0, 0, 0, 0), null);
-            WeldObject.Weld(obj1, obj2, rHand, lHand);
-        }
+        //if (menuAction.GetState(rightHand) && oneTime)
+        //{
+        //    oneTime = false;
+        //    GameObject obj1 = Instantiate(objectToCreate, new Vector3(0, 0.5f, 0), new Quaternion(0, 0, 0, 0), null);
+        //    GameObject obj2 = Instantiate(objectToCreate2, new Vector3(1, 0.5f, 0), new Quaternion(0, 0, 0, 0), null);
+        //    WeldObject.Weld(obj1, obj2, rHand, lHand);
+        //}
 
-        if (weldObject1 && weldObject2 && mode == Mode.Weld)
+        if (weldObject1 && weldObject2 && rHand && lHand && mode == Mode.Weld)
         {
             if (weldObject1 == weldObject2)
                 return;

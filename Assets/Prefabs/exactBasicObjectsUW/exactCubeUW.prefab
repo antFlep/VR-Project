@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 7836873743340698499}
   - component: {fileID: 7836873743340698496}
   - component: {fileID: 6135423773491620781}
+  - component: {fileID: 316546766101427369}
   m_Layer: 10
   m_Name: exactCubeUW
   m_TagString: weldable
@@ -224,6 +225,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modeSwitcher: {fileID: 0}
   weldMaterial: {fileID: 2100000, guid: b8d557773fd950946a6e5e44ed4f99ae, type: 2}
+  origMaterial: {fileID: 0}
+  highlight: 0
+--- !u!114 &316546766101427369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7836873743340698497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0388ca03eb9c00f47b99872cfd57f779, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7836873742737505978
 PrefabInstance:
   m_ObjectHideFlags: 0

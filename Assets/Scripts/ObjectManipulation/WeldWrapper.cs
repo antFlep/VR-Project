@@ -7,8 +7,8 @@ public class WeldWrapper : MonoBehaviour
     public ModeSwitcher modeSwitcher;
     public Material weldMaterial;
 
-    Material origMaterial;
-    MeshRenderer renderer;
+    public Material origMaterial;
+    private MeshRenderer renderer;
     public bool highlight = false;
 
     // Start is called before the first frame update
@@ -26,22 +26,26 @@ public class WeldWrapper : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (modeSwitcher.weldObject1.Equals(this.gameObject) || modeSwitcher.weldObject2.Equals(this.gameObject) || highlight)
-        {
-            if (renderer)
-            {
-                //origMaterial = renderer.material;
-                renderer.material = weldMaterial;
-                HighlightChildren();
-            }
-        } else
-        {
-            if(renderer)
-            {
-                renderer.material = origMaterial;
-                UnHighlightChildren();
-            }
-        }
+        //if (modeSwitcher.weldObject1 && modeSwitcher.weldObject2)
+        //{
+        //    if (modeSwitcher.weldObject1.Equals(this.gameObject) || modeSwitcher.weldObject2.Equals(this.gameObject) || highlight)
+        //    {
+        //        if (renderer)
+        //        {
+        //            //origMaterial = renderer.material;
+        //            renderer.material = weldMaterial;
+        //            HighlightChildren();
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    if(renderer)
+        //    {
+        //        renderer.material = origMaterial;
+        //        UnHighlightChildren();
+        //    }
+        //}
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -49,13 +53,34 @@ public class WeldWrapper : MonoBehaviour
         if (collider.gameObject.name == "RightHandCollider")
         {
             Debug.Log("Obj1");
-            modeSwitcher.weldObject1 = transform.gameObject;
+            if (modeSwitcher.weldObject2)
+            { 
+                if (!modeSwitcher.weldObject2.Equals(this.gameObject))
+                {
+                    modeSwitcher.weldObject1 = transform.gameObject;
+                }
+            }
+            else
+            {
+                modeSwitcher.weldObject1 = transform.gameObject;
+            } 
         }
 
         if (collider.gameObject.name == "LeftHandCollider")
         {
             Debug.Log("Obj2");
-            modeSwitcher.weldObject2 = transform.gameObject;
+            if (modeSwitcher.weldObject1)
+            {
+                if (!modeSwitcher.weldObject1.Equals(this.gameObject))
+                {
+                    modeSwitcher.weldObject2 = transform.gameObject;
+                }
+            }
+            else
+            {
+                modeSwitcher.weldObject2 = transform.gameObject;
+            }
+            //modeSwitcher.weldObject2 = transform.gameObject;
         }
     }
 
