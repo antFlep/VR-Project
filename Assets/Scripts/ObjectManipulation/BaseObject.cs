@@ -57,7 +57,13 @@ public class BaseObject : MonoBehaviour
                     Expand();
                     break;
                 case ModeSwitcher.Mode.Stretch:
-                    Stretch(stretching ? 2 : -2);
+                    if (transform.parent.localScale.y > 0.005 && (face == MCFace.Up || face == MCFace.Down) ||
+                        transform.parent.localScale.x > 0.005 && (face == MCFace.East || face == MCFace.West) ||
+                        transform.parent.localScale.z > 0.005 && (face == MCFace.North || face == MCFace.South))
+                    {
+                        Debug.Log(face);
+                        Stretch(stretching ? 2 : -2);
+                    }
                     break;
                 default:
                     Debug.Log("Current Mode: " + modeSwitcher.mode);
