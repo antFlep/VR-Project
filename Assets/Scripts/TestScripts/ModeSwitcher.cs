@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using Valve.VR;
 using Valve.VR.InteractionSystem;
@@ -8,6 +9,7 @@ public class ModeSwitcher : MonoBehaviour
 {
     public bool stretchMode = false;
     public bool weldMode = false;
+    bool flag = true;
     public SteamVR_Input_Sources rightHand;
     public SteamVR_Input_Sources leftHand;
     public SteamVR_Action_Boolean testAction; // 3
@@ -35,7 +37,8 @@ public class ModeSwitcher : MonoBehaviour
     }
 
 
-    bool oneTime = true;
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,13 +63,24 @@ public class ModeSwitcher : MonoBehaviour
             mode = Mode.Weld;
         }
 
-        //if (menuAction.GetState(rightHand) && oneTime)
-        //{
-        //    oneTime = false;
-        //    GameObject obj1 = Instantiate(objectToCreate, new Vector3(0, 0.5f, 0), new Quaternion(0, 0, 0, 0), null);
-        //    GameObject obj2 = Instantiate(objectToCreate2, new Vector3(1, 0.5f, 0), new Quaternion(0, 0, 0, 0), null);
-        //    WeldObject.Weld(obj1, obj2, rHand, lHand);
-        //}
+        if (menuAction.GetState(rightHand))
+        {
+            if (weldObject1 == null)
+                return;
+
+            //GameObject clone;
+            if (flag)
+            {
+               //clone = PrefabUtility.SaveAsPrefabAsset(weldObject1, "Assets/Prefabs/FakePrefabs/tast.prefab");
+               //GameObject.Instantiate(clone, new Vector3(0, 0.5f, 0), new Quaternion(0, 0, 0, 0), null);
+               Instantiate(weldObject1, new Vector3(0, 0.5f, 0), new Quaternion(0, 0, 0, 0), null);
+            }
+            flag = false;
+        }
+        else
+        {
+            flag = true;
+        }
 
         if (weldObject1 && weldObject2 && rHand && lHand && mode == Mode.Weld)
         {
